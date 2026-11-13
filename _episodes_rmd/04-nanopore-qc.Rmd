@@ -26,9 +26,69 @@ In this part of the module, we'll look at software applications that can be used
 - FastQC (you've already seen this): generic tool for assessing the quality of next generation sequencing data.
 - NanoPlot: quality assessment software specifically built for ONT data.
 
+## Reminder; `.bam` file location
+
+~~~
+tree bam-unaligned
+~~~
+{: .bash}
+
+~~~
+bam-unaligned/
+└── NO_MISSV2_P2I
+    └── P2I_96
+        └── 20260413_1636_P2I-00014-B_PBK98658_853a956f
+            └── bam_pass
+                ├── barcode01
+                │   └── PBK98658_pass_barcode01_853a956f_57f83f46_0.bam
+                ├── barcode02
+                │   └── PBK98658_pass_barcode02_853a956f_57f83f46_0.bam
+                ├── barcode03
+                │   └── PBK98658_pass_barcode03_853a956f_57f83f46_0.bam
+                └── unclassified
+                    └── PBK98658_pass_unclassified_853a956f_57f83f46_0.bam
+~~~
+{: .output}
+
+
 ## NanoPlot
 
-Let's use the NanoPlot software to assess the quality of our unaligned `.bam` data.  We can run NanoPlot interactively (i.e., we don't need to submit it as a slurm job), and it wil produce an HTML-based report that can be viewed in a browser.
+Let's use the NanoPlot software to assess the quality of our unaligned `.bam` data.  We can run NanoPlot 
+interactively (i.e., we don't need to submit it as a slurm job), and it wil produce an HTML-based report 
+that can be viewed in a browser.
+
+### Reminder; `.bam` file location
+
+~~~
+tree bam-unaligned
+~~~
+{: .bash}
+
+~~~
+bam-unaligned/
+└── NO_MISSV2_P2I
+    └── P2I_96
+        └── 20260413_1636_P2I-00014-B_PBK98658_853a956f
+            └── bam_pass
+                ├── barcode01
+                │   └── PBK98658_pass_barcode01_853a956f_57f83f46_0.bam
+                ├── barcode02
+                │   └── PBK98658_pass_barcode02_853a956f_57f83f46_0.bam
+                ├── barcode03
+                │   └── PBK98658_pass_barcode03_853a956f_57f83f46_0.bam
+                └── unclassified
+                    └── PBK98658_pass_unclassified_853a956f_57f83f46_0.bam
+~~~
+{: .output}
+
+Specify a `.bam` file to run NanoPlot on:
+
+~~~
+BAMFILE=bam-unaligned/NO_MISSV2_P2I/P2I_96/20260413_1636_P2I-00014-B_PBK98658_853a956f/bam_pass/barcode01/PBK98658_pass_barcode01_853a956f_57f83f46_0.bam 
+~~~
+{: .bash}
+
+### Running Nanoplot 
 
 Load the NanoPlot module:
 
@@ -37,64 +97,94 @@ module load NanoPlot
 ~~~
 {: .bash}
 
-Run NanoPlot on `.bam` file:
+Run NanoPlot on a single `.bam` file:
 
 ~~~
-NanoPlot -o nanoplot_fastmodel \
-         -p ecoli_fastmodel_ \
-         --ubam bam-unaligned/ecoli-pod5-pass-basecalls.bam
+NanoPlot -o nanoplot_fastmodel/barcode01 \
+         -p bacteria_fastmodel_barcode01_ \
+         --ubam $BAMFILE
 ~~~
 {: .bash}
 
 Command syntax:
 
 - `NanoPlot`: run the NanoPlot command (note that the capital N and P are required).
-- `-o nanoplot_fastmodel`: folder for output (`-o`) to be written.
-- `-p ecoli_fastmodel_`: prefix (`-p`) to be appended to start of each filename in the output folder.
-- `--ubam bam-unaligned/ecoli-pod5-pass-basecalls.bam`: the unaligned bam (`ubam`) file to process with NanoPlot.
-
-Note that (for reasons we won't get into) NanoPlot will probably give you the following warning when it runs (but it will still work):
-
-~~~
-E::idx_find_and_load] Could not retrieve index file for 'ecoli-pod5-pass-basecalls.bam'
-~~~
-{: .output}
+- `-o nnanoplot_fastmodel/barcode01`: folder for output (`-o`) to be written.
+- `-p bacteria_fastmodel_barcode01_`: prefix (`-p`) to be appended to start of each filename in the output folder.
+- `--ubam $BAMFILE`: the unaligned bam (`ubam`) file to process with NanoPlot.
 
 Let's check what output was generated:
 
 ~~~
-ls -1 nanoplot_fastmodel/
+ls -1 nanoplot_fastmodel/barcode01
 ~~~
 {: .bash}
 
 ~~~
-ecoli_fastmodel_LengthvsQualityScatterPlot_dot.html
-ecoli_fastmodel_LengthvsQualityScatterPlot_dot.png
-ecoli_fastmodel_LengthvsQualityScatterPlot_kde.html
-ecoli_fastmodel_LengthvsQualityScatterPlot_kde.png
-ecoli_fastmodel_NanoPlot_20231126_0241.log
-ecoli_fastmodel_NanoPlot-report.html
-ecoli_fastmodel_NanoStats.txt
-ecoli_fastmodel_Non_weightedHistogramReadlength.html
-ecoli_fastmodel_Non_weightedHistogramReadlength.png
-ecoli_fastmodel_Non_weightedLogTransformed_HistogramReadlength.html
-ecoli_fastmodel_Non_weightedLogTransformed_HistogramReadlength.png
-ecoli_fastmodel_WeightedHistogramReadlength.html
-ecoli_fastmodel_WeightedHistogramReadlength.png
-ecoli_fastmodel_WeightedLogTransformed_HistogramReadlength.html
-ecoli_fastmodel_WeightedLogTransformed_HistogramReadlength.png
-ecoli_fastmodel_Yield_By_Length.html
-ecoli_fastmodel_Yield_By_Length.png
+bacteria_fastmodel_barcode01_LengthvsQualityScatterPlot_dot.html
+bacteria_fastmodel_barcode01_LengthvsQualityScatterPlot_dot.png
+bacteria_fastmodel_barcode01_LengthvsQualityScatterPlot_kde.html
+bacteria_fastmodel_barcode01_LengthvsQualityScatterPlot_kde.png
+bacteria_fastmodel_barcode01_NanoPlot_20261113_1235.log
+bacteria_fastmodel_barcode01_NanoPlot-report.html
+bacteria_fastmodel_barcode01_NanoStats.txt
+bacteria_fastmodel_barcode01_Non_weightedHistogramReadlength.html
+bacteria_fastmodel_barcode01_Non_weightedHistogramReadlength.png
+bacteria_fastmodel_barcode01_Non_weightedLogTransformed_HistogramReadlength.html
+bacteria_fastmodel_barcode01_Non_weightedLogTransformed_HistogramReadlength.png
+bacteria_fastmodel_barcode01_WeightedHistogramReadlength.html
+bacteria_fastmodel_barcode01_WeightedHistogramReadlength.png
+bacteria_fastmodel_barcode01_WeightedLogTransformed_HistogramReadlength.html
+bacteria_fastmodel_barcode01_WeightedLogTransformed_HistogramReadlength.png
+bacteria_fastmodel_barcode01_Yield_By_Length.html
+bacteria_fastmodel_barcode01_Yield_By_Length.png
 ~~~
 {: .output}
 
-The file that we are interested in is the HTML report: `ecoli_fastmodel_NanoPlot-report.html`
+The file that we are interested in is the HTML report: `bacteria_fastmodel_barcode01_NanoPlot-report.html`
 
 To view this in your browser:
 
-1. Use the file browser (left panel of Jupyter window) to navigate to the `nanoplot_fastmodel` folder.
-2. Control-click (Mac) or right-click (Windows/Linux) on the "ecoli_fastmodel_NanoPlot-report.html" file and choose "Open in New Browser Tab".
+1. Use the file browser (left panel of Jupyter window) to navigate to the `nanoplot_fastmodel/barcode01` folder.
+2. Control-click (Mac) or right-click (Windows/Linux) on the "bacteria_fastmodel_barcode01_NanoPlot-report.html" file and choose "Open in New Browser Tab".
 3. The report should now be displayed in a new tab in your browser.
+
+### Processing multiple `.bam` files
+
+Nanoplot doesn't have a built-in mechanism for processing multiple `.bam` files and keeping the output separate for each.
+If you give it multiple `.bam` files (e.g., via `Nanoplot --ubam *.bam`) it will combine all of the results into a 
+single report.
+
+In order to process each of the `.bam` files separately, you can use a loop:
+
+~~~
+FOLDER=bam-unaligned/NO_MISSV2_P2I/P2I_96/20260413_1636_P2I-00014-B_PBK98658_853a956f/bam_pass/
+
+for i in barcode02  barcode03 unclassified; \
+do 
+    NanoPlot -o nanoplot_fastmodel/$i \
+             -p bacteria_fastmodel_$i_ \
+             --ubam $FOLDER/$i/*.bam; done
+~~~
+{: .bash}
+
+Once this has completed, we can check to see what has been created:
+
+~~~
+ls -1 nanoplot_fastmodel
+~~~
+{: .bash}
+
+~~~
+barcode01
+barcode02
+barcode03
+unclassified
+~~~
+{: .output}
+
+There is now one folder of Nanoplot output for each barcoded sample.
+
 
 ## FastQC
 
@@ -112,10 +202,40 @@ mkdir fastqc_fastmodel
 ~~~
 {: .bash}
 
+Unlike Nanoplot, FastQC *can* handle multiple `.bam` files at once.
+
+Let's re-use the `$FOLDER` variable we created. 
+
+Reminder:
+
+~~~
+tree $FOLDER
+~~~
+{: .bash}
+
+~~~
+bam-unaligned/NO_MISSV2_P2I/P2I_96/20260413_1636_P2I-00014-B_PBK98658_853a956f/bam_pass/
+├── barcode01
+│   ├── PBK98658_pass_barcode01_853a956f_57f83f46_0.bam
+│   └── PBK98658_pass_barcode01_853a956f_57f83f46_0.bam.bai
+├── barcode02
+│   ├── PBK98658_pass_barcode02_853a956f_57f83f46_0.bam
+│   └── PBK98658_pass_barcode02_853a956f_57f83f46_0.bam.bai
+├── barcode03
+│   ├── PBK98658_pass_barcode03_853a956f_57f83f46_0.bam
+│   └── PBK98658_pass_barcode03_853a956f_57f83f46_0.bam.bai
+└── unclassified
+    ├── PBK98658_pass_unclassified_853a956f_57f83f46_0.bam
+    └── PBK98658_pass_unclassified_853a956f_57f83f46_0.bam.bai
+~~~
+{: .output}
+
+Fun fact - Nanoplot created a `.bai` (bam index) file for us when it processed the data.
+
 Run FastQC on our data:
 
 ~~~
-fastqc -t 4 -o fastqc_fastmodel bam-unaligned/ecoli-pod5-pass-basecalls.bam
+fastqc -t 4 -o fastqc_fastmodel $FOLDER/*/*.bam
 ~~~
 {: .bash}
 
@@ -124,7 +244,7 @@ Command syntax:
 - `fastqc`: run the `fastqc` command
 - `-t 4`: use four cpus to make it go faster (the `-t` is for "threads").
 - `-o fastqc_fastmodel`: specify output folder.
-- `bam-unaligned/ecoli-pod5-pass-basecalls.bam`: data file to analyse.
+- `$FOLDER/*/*.bam`: data files to analyse (all bam files in all directories under $FOLDER).
 
 Check the output:
 
@@ -134,15 +254,22 @@ ls -1 fastqc_fastmodel
 {: .bash}
 
 ~~~
-ecoli-pod5-pass-basecalls_fastqc.html
-ecoli-pod5-pass-basecalls_fastqc.zip
+PBK98658_pass_barcode01_853a956f_57f83f46_0_fastqc.html
+PBK98658_pass_barcode01_853a956f_57f83f46_0_fastqc.zip
+PBK98658_pass_barcode02_853a956f_57f83f46_0_fastqc.html
+PBK98658_pass_barcode02_853a956f_57f83f46_0_fastqc.zip
+PBK98658_pass_barcode03_853a956f_57f83f46_0_fastqc.html
+PBK98658_pass_barcode03_853a956f_57f83f46_0_fastqc.zip
+PBK98658_pass_unclassified_853a956f_57f83f46_0_fastqc.html
+PBK98658_pass_unclassified_853a956f_57f83f46_0_fastqc.zip
 ~~~
 {: .output}
 
 As we did with the NanoPlot output, we can view the HTML report in the browser:
 
 1. Use the file browser (left panel of Jupyter window) to navigate to the `fastqc_fastmodel` folder.
-2. Control-click (Mac) or right-click (Windows/Linux) on the "ecoli-pass_fastqc.html" file and choose "Open in New Browser Tab".
+2. Control-click (Mac) or right-click (Windows/Linux) on the "PBK98658_pass_barcode01_853a956f_57f83f46_0_fastqc.html" 
+file and choose "Open in New Browser Tab".
 3. The report should now be displayed in a new tab in your browser.
 
 ## Bioawk (we might skip this one)

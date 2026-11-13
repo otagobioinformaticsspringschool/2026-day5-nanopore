@@ -70,11 +70,11 @@ the software had a chance to map it to the genome and determine whether or not t
 Here is the full distribution of read lengths without adaptive sampling turned on (i.e., I also ran a 
 simulation without adaptive sampling) - there are LOTS of reads that less than 1000bp long:
 
-<img src="../fig/06-non-as-reads.png" width="80%" style="display: block; margin: auto auto auto 0;" />
+<img src="../fig/06-non-as-reads.png" alt="" width="80%" style="display: block; margin: auto auto auto 0;" />
 
 Here is a zoomed in view:
 
-<img src="../fig/06-non-as-reads-closeup.png" width="80%" style="display: block; margin: auto auto auto 0;" />
+<img src="../fig/06-non-as-reads-closeup.png" alt="" width="80%" style="display: block; margin: auto auto auto 0;" />
 
 ### Adaptive sampling results
 
@@ -87,11 +87,11 @@ reads that were unblocked (i.e., the read was mapped in real-time, and the AS al
 
 Here is the full distribution:
 
-<img src="../fig/06-as-reads.png" width="80%" style="display: block; margin: auto auto auto 0;" />
+<img src="../fig/06-as-reads.png" alt="" width="80%" style="display: block; margin: auto auto auto 0;" />
 
 And here is a close up:
 
-<img src="../fig/06-as-reads-closeup.png" width="80%" style="display: block; margin: auto auto auto 0;" />
+<img src="../fig/06-as-reads-closeup.png" alt="" width="80%" style="display: block; margin: auto auto auto 0;" />
 
 It is clear from the plots that the length of reads receiving an "unblock" signal is around 800bp, reflecting the time that 
 the AS algorithm takes to make a decision about whether or not to reject a read.
@@ -616,7 +616,7 @@ ggplot(bedCov, aes(x=START, y=DEPTH)) +
 ~~~
 {: .language-r}
 
-<img src="../fig/rmd-06-unnamed-chunk-13-1.png" width="612" style="display: block; margin: auto auto auto 0;" />
+<img src="../fig/rmd-06-unnamed-chunk-13-1.png" alt="" width="612" style="display: block; margin: auto auto auto 0;" />
 
 #### Average read-depth in selected and non-selected regions
 
