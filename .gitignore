@@ -1,2 +1,5 @@
 .vendor
 _site
+.DS_Store 
+*.webp
+*.af*

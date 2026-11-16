@@ -41,7 +41,7 @@ knitr::opts_chunk$set(fig.align = "left", echo = FALSE, message = FALSE, warning
 
 
 ```{r, out.width="80%"}
-knitr::include_graphics("../fig/01-oxnano_2022.png")
+knitr::include_graphics("../fig-2026/ont-table.png")
 ```
 
 ### The MinION
@@ -198,12 +198,12 @@ knitr::include_graphics("../fig/01-sequencing-animated_0.gif")
 
 
 
-### Nanopore movies
+### More information
 
 For more detailed information about ONT sequencing:
 
  - [https://nanoporetech.com/products/minion](https://nanoporetech.com/products/minion)
- - [https://nanoporetech.com/products/minion](https://nanoporetech.com/how-it-works)
+ - [https://nanoporetech.com/resources](https://nanoporetech.com/resources)
 
 
 
@@ -235,8 +235,6 @@ knitr::include_graphics("../fig/01-r10-pore.png")
 [https://nanoporetech.com/about-us/news/r103-newest-nanopore-high-accuracy-nanopore-sequencing-now-available-store](https://nanoporetech.com/about-us/news/r103-newest-nanopore-high-accuracy-nanopore-sequencing-now-available-store)
 
 
-
-
 ### Nanopore workflow
 
 ```{r, out.width="70%"}
@@ -263,39 +261,44 @@ knitr::include_graphics("../fig/01-nanopore-workflow.png")
 ### 10.4.1 flowcells + v14 chemistry: accuracy
 
 ```{r, out.width="50%"}
-knitr::include_graphics("../fig/01-ont-accurarcy-1.png")
+knitr::include_graphics("../fig-2026/kim-2024-quote.png")
 ```
 
 <BR> 
 
 ```{r, out.width="50%"}
-knitr::include_graphics("../fig/01-ont-accurarcy-2.png")
+knitr::include_graphics("../fig-2026/kim-2024-dna.png")
+```
+
+<BR> 
+
+```{r, out.width="50%"}
+knitr::include_graphics("../fig-2026/kim-2024-dna.png")
 ```
 
 [https://nanoporetech.com/accuracy](https://nanoporetech.com/accuracy)
 
+### OLDER INFORMATION
 
-## 10.4.1 flowcells + v14 chemistry: simplex
+#### 10.4.1 flowcells + v14 chemistry: simplex
 
-- The new chemistry (v14) and updated flowcells (10.4.1) have moved the quality up to ON AVERAGE 1 error per 100 bases (Q20) for simplex reads (single strand).
+- The v14 chemistry and 10.4.1 flowcells achieved quality scores of ON AVERAGE 1 error per 100 bases (Q20) for simplex reads (single strand).
 
 ```{r, out.width="50%"}
 knitr::include_graphics("../fig/01-ont-simplex-q20.png")
 ```
 
-[https://nanoporetech.com/q20plus-chemistry](https://nanoporetech.com/q20plus-chemistry)
 
+#### 10.4.1 flowcells + v14 chemistry: duplex
 
-### 10.4.1 flowcells + v14 chemistry: duplex
-
-- The quality is even higher for duplex reads: mean of 30
+- "Duplex mode" involves reading both strands of a fragment, and using the dual 
+information for error correction.
+- This achieves higher quality for duplex reads: mean of 30
 - BUT: less than 50% of reads are duplex (i.e., you don't always manage to read both strands)
 
 ```{r, out.width="50%"}
 knitr::include_graphics("../fig/01-ont-duplex-q30.png")
 ```
-
-[https://nanoporetech.com/q20plus-chemistry](https://nanoporetech.com/q20plus-chemistry)
 
 
 ### More Nanopore: London Calling 2026

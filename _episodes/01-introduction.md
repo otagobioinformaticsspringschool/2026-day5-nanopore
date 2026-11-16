@@ -37,7 +37,7 @@ source: Rmd
 ### ONT platforms
 
 
-<img src="../fig/01-oxnano_2022.png" alt="" width="80%" style="display: block; margin: auto auto auto 0;" />
+<img src="../fig-2026/ont-table.png" alt="" width="80%" style="display: block; margin: auto auto auto 0;" />
 
 ### The MinION
 
@@ -167,12 +167,12 @@ Smaller device (standalone or connect to host computer) that can run Promethion 
 
 
 
-### Nanopore movies
+### More information
 
 For more detailed information about ONT sequencing:
 
  - [https://nanoporetech.com/products/minion](https://nanoporetech.com/products/minion)
- - [https://nanoporetech.com/products/minion](https://nanoporetech.com/how-it-works)
+ - [https://nanoporetech.com/resources](https://nanoporetech.com/resources)
 
 
 
@@ -200,8 +200,6 @@ For more detailed information about ONT sequencing:
 [https://nanoporetech.com/about-us/news/r103-newest-nanopore-high-accuracy-nanopore-sequencing-now-available-store](https://nanoporetech.com/about-us/news/r103-newest-nanopore-high-accuracy-nanopore-sequencing-now-available-store)
 
 
-
-
 ### Nanopore workflow
 
 <img src="../fig/01-nanopore-workflow.png" alt="" width="70%" style="display: block; margin: auto auto auto 0;" />
@@ -225,32 +223,35 @@ For more detailed information about ONT sequencing:
 
 ### 10.4.1 flowcells + v14 chemistry: accuracy
 
-<img src="../fig/01-ont-accurarcy-1.png" alt="" width="50%" style="display: block; margin: auto auto auto 0;" />
+<img src="../fig-2026/kim-2024-quote.png" alt="" width="50%" style="display: block; margin: auto auto auto 0;" />
 
 <BR> 
 
-<img src="../fig/01-ont-accurarcy-2.png" alt="" width="50%" style="display: block; margin: auto auto auto 0;" />
+<img src="../fig-2026/kim-2024-dna.png" alt="" width="50%" style="display: block; margin: auto auto auto 0;" />
+
+<BR> 
+
+<img src="../fig-2026/kim-2024-dna.png" alt="" width="50%" style="display: block; margin: auto auto auto 0;" />
 
 [https://nanoporetech.com/accuracy](https://nanoporetech.com/accuracy)
 
+### OLDER INFORMATION
 
-## 10.4.1 flowcells + v14 chemistry: simplex
+#### 10.4.1 flowcells + v14 chemistry: simplex
 
-- The new chemistry (v14) and updated flowcells (10.4.1) have moved the quality up to ON AVERAGE 1 error per 100 bases (Q20) for simplex reads (single strand).
+- The v14 chemistry and 10.4.1 flowcells achieved quality scores of ON AVERAGE 1 error per 100 bases (Q20) for simplex reads (single strand).
 
 <img src="../fig/01-ont-simplex-q20.png" alt="" width="50%" style="display: block; margin: auto auto auto 0;" />
 
-[https://nanoporetech.com/q20plus-chemistry](https://nanoporetech.com/q20plus-chemistry)
 
+#### 10.4.1 flowcells + v14 chemistry: duplex
 
-### 10.4.1 flowcells + v14 chemistry: duplex
-
-- The quality is even higher for duplex reads: mean of 30
+- "Duplex mode" involves reading both strands of a fragment, and using the dual 
+information for error correction.
+- This achieves higher quality for duplex reads: mean of 30
 - BUT: less than 50% of reads are duplex (i.e., you don't always manage to read both strands)
 
 <img src="../fig/01-ont-duplex-q30.png" alt="" width="50%" style="display: block; margin: auto auto auto 0;" />
-
-[https://nanoporetech.com/q20plus-chemistry](https://nanoporetech.com/q20plus-chemistry)
 
 
 ### More Nanopore: London Calling 2026
