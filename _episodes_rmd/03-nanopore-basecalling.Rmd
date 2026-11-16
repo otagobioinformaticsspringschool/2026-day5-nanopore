@@ -38,6 +38,10 @@ knitr::opts_chunk$set(fig.align = "left", echo = FALSE, message = FALSE, warning
 
 <br>
 
+Python-based tools for working with POD5:
+
+[https://github.com/nanoporetech/pod5-file-format](https://github.com/nanoporetech/pod5-file-format)
+
 ```{r, out.width="50%"}
 knitr::include_graphics("../fig/01-pod5-format.png")
 ```
@@ -47,12 +51,6 @@ knitr::include_graphics("../fig/01-pod5-format.png")
 Automatic local conversion of FAST5 to POD5:
 
 [https://pod5.nanoporetech.com/](https://pod5.nanoporetech.com/)
-
-<BR>
-
-Python-based tools for workign with POD5:
-
-[https://github.com/nanoporetech/pod5-file-format](https://github.com/nanoporetech/pod5-file-format)
 
 
 ### Basecalling workflow

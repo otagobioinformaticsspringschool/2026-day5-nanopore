@@ -36,9 +36,15 @@ source: Rmd
 
 <br>
 
+Python-based tools for working with POD5:
+
+[https://github.com/nanoporetech/pod5-file-format](https://github.com/nanoporetech/pod5-file-format)
+
 <img src="../fig/01-pod5-format.png" alt="" width="50%" style="display: block; margin: auto auto auto 0;" />
 
 <br>
+
+Automatic local conversion of FAST5 to POD5:
 
 [https://pod5.nanoporetech.com/](https://pod5.nanoporetech.com/)
 
