@@ -35,7 +35,7 @@ source: Rmd
  - For long-read data, ONT provides the Minimap2 aligner (but there are also a number of other options).
 
 
-## Alignment with `dorado` and `minimap2` on NeSI
+## Alignment with `dorado` and `minimap2` on REANNZ
  
 Check that we've got a reference genome:
 
@@ -45,7 +45,7 @@ ls genome
 {: .bash}
 
 ~~~
-e-coli-k12-MG1655.fasta
+GCF_000006945.2_ASM694v2_genomic.fna
 ~~~
 {: .output}
 
@@ -70,36 +70,93 @@ mkdir bam-aligned
 ~~~
 {: .bash}
 
+Reminder: our unaligned `.bam` files are located at: 
+
+`bam-unaligned/NO_MISSV2_P2I/P2I_96/20260413_1636_P2I-00014-B_PBK98658_853a956f/bam_pass/` 
+
+We still have our `$FOLDER` variable from earlier:
+
+~~~
+echo $FOLDER
+~~~
+{: .bash}
+
+~~~
+bam-unaligned/NO_MISSV2_P2I/P2I_96/20260413_1636_P2I-00014-B_PBK98658_853a956f/bam_pass/
+~~~
+{: .output}
+
+~~~
+tree $FOLDER
+~~~
+{: .bash}
+
+~~~
+bam-unaligned/NO_MISSV2_P2I/P2I_96/20260413_1636_P2I-00014-B_PBK98658_853a956f/bam_pass/
+├── barcode01
+│   ├── PBK98658_pass_barcode01_853a956f_57f83f46_0.bam
+│   └── PBK98658_pass_barcode01_853a956f_57f83f46_0.bam.bai
+├── barcode02
+│   ├── PBK98658_pass_barcode02_853a956f_57f83f46_0.bam
+│   └── PBK98658_pass_barcode02_853a956f_57f83f46_0.bam.bai
+├── barcode03
+│   ├── PBK98658_pass_barcode03_853a956f_57f83f46_0.bam
+│   └── PBK98658_pass_barcode03_853a956f_57f83f46_0.bam.bai
+└── unclassified
+    ├── PBK98658_pass_unclassified_853a956f_57f83f46_0.bam
+    └── PBK98658_pass_unclassified_853a956f_57f83f46_0.bam.bai
+~~~
+{: .output}
+
+The first three barcodes relate to *Salmonella* isolates. Let's copy those to a separate folder to make them a little easier to find. By using the `barcode*` 
+pattern, we can select just the files whose barcodes were reliably detected (i.e., not the "unclassified" reads).
+
+~~~
+mkdir salmonella-bamfiles
+
+cp $FOLDER/barcode*/*.bam salmonella-bamfiles/ 
+
+ls -1 salmonella-bamfiles/
+~~~
+{: .bash}
+
+~~~
+PBK98658_pass_barcode01_853a956f_57f83f46_0.bam
+PBK98658_pass_barcode02_853a956f_57f83f46_0.bam
+PBK98658_pass_barcode03_853a956f_57f83f46_0.bam
+~~~
+{: .output}
+
 We can use `dorado` again to align the reads to our reference genome (note, this can also be done as part of the basecalling process, but that means you're performing alignemnt prior to having done any QC checking).
 
 `dorado` uses the `minimap2` aligner (another software tool from ONT).  The syntax for performing alignemnt on basecalled data is (`-t 4` specifies four threads: faster):
 
 ~~~
 dorado aligner -t 4 \
-  genome/e-coli-k12-MG1655.fasta \
-  bam-unaligned/ecoli-pod5-pass-basecalls.bam | \
-  samtools sort -o bam-aligned/ecoli-pod5-pass-aligned-sort.bam 
+  genome/GCF_000006945.2_ASM694v2_genomic.fna \
+  salmonella-bamfiles/ | \
+  samtools sort -o bam-aligned/salmonella-aligned-sort.bam 
 ~~~
 {: .bash}
 
 Index the bam file:
 
 ~~~
-
-samtools index bam-aligned/ecoli-pod5-pass-aligned-sort.bam
+samtools index bam-aligned/salmonella-aligned-sort.bam 
 ~~~
 {: .bash}
 
 Generate basic mapping information using samtools:
 
 ~~~
-samtools coverage bam-aligned/ecoli-pod5-pass-aligned-sort.bam
+samtools coverage bam-aligned/salmonella-aligned-sort.bam 
 ~~~
 {: .bash}
 
 ~~~
-#rname      startpos     endpos   numreads   covbases    coverage    meandepth   meanbaseq   meanmapq
-U00096.3           1    4641652      12139    4641652         100      24.8486        15.4       59.5
+#rname       startpos      endpos  numreads   covbases  coverage  meandepth    meanbaseq    meanmapq
+NC_003197.2         1     4857450      7821    4298511   88.4932    2.92054         43.1        58.6
+NC_003277.2         1       93933        62      16929   18.0224   0.668626         40.1        52
 ~~~
 {: .output}
 
@@ -129,9 +186,9 @@ Generate a "pileup" file to enable variant calling (might take a little bit of t
 ~~~
 bcftools mpileup --threads 4 \
    -B -Q5 --max-BQ 30 -I \
-   -o bcf-files/ecoli-pass.bcf \
-   -f genome/e-coli-k12-MG1655.fasta  \
-   bam-aligned/ecoli-pod5-pass-aligned-sort.bam
+   -o bcf-files/salmonella-pass.bcf \
+   -f genome/GCF_000006945.2_ASM694v2_genomic.fna  \
+   bam-aligned/salmonella-aligned-sort.bam
 ~~~
 {: .bash}
 
@@ -142,24 +199,24 @@ mkdir vcf-files
 ~~~
 {: .bash}
 
-Use `bcftools` to call variants in the *e. coli* data:
+Use `bcftools` to call variants in the *salmonella* data:
 
 ~~~
 bcftools call --ploidy 1 -m -v \
-   -o vcf-files/ecoli-variants.vcf \
-   bcf-files/ecoli-pass.bcf 
+   -o vcf-files/salmonella-variants.vcf \
+   bcf-files/salmonella-pass.bcf 
 ~~~
 {: .bash}
 
 Use `vcfutils.pl` to *filter* the variants (in this case, everything gets kept):
 
 ~~~
-vcfutils.pl varFilter vcf-files/ecoli-variants.vcf  > vcf-files/ecoli-final-variants.vcf
+vcfutils.pl varFilter vcf-files/salmonella-variants.vcf  > vcf-files/salmonella-final-variants.vcf
 ~~~
 {: .bash}
 
 ~~~
-more vcf-files/ecoli-final-variants.vcf
+more vcf-files/salmonella-final-variants.vcf
 ~~~
 {: .bash}
 

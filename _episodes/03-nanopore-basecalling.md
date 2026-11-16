@@ -125,9 +125,33 @@ BAM is a binary (compressed) version of the text-based SAM format (warning, not 
 [https://samtools.github.io/hts-specs/SAMv1.pdf](https://samtools.github.io/hts-specs/SAMv1.pdf)
 
 
+## ONT: "NO-MISS Bacterial isolate dataset"
+
+<img src="../fig-2026/ecoli.png" alt="" width="40%" style="display: block; margin: auto auto auto 0;" />
+
+For this part of the workshop we are using a subset of this data set provided by Oxford Nanopore Technologies:
+
+[https://epi2me.nanoporetech.com/nomiss_96bc_p2i_sup_2026/](https://epi2me.nanoporetech.com/nomiss_96bc_p2i_sup_2026/)
+
+The data consist of a Promethion run where *barcoding* was used to run 96 samples on a single flowcell. The samples represent
+a collection of 24 bacterial isolates, each procesed in quadruplicate (i.e., four replicates of each: 4 x 24 = 96 barcodes).
+
+The samples comprise 15 distinct species representing the following genera: 
+
+*Bacillus, Cronobacter, Citrobacter, Enterobacter, Klebsiella, Listeria, Pseudomonas, Salmonella, Shigella, Staphylococcus, and Vibrio.*
+
+The full dataset can be downloaded from [https://aws.amazon.com/opendata/](Open Data on AWS), or you can view/download files 
+via web browser at [42basepairs](https://42basepairs.com/browse/s3/ont-open-data/nomiss_96BC_P2I_SUP_2026).
+
+The raw data are roughly 1.6TB though, so we won't be using all of that today...
+
+Instead, I've created a cut-down data set that contains just a (very small) subset of the data, and only includes reads 
+from the first three barcoded samples (plus some random unclassified reads) - they are all *Salmonella* samples, and mainly 
+comprise *Salmonella enterica*.
+
 ## Bacterial data set on REANNZ
 
-For this part of the workshop we are working at:
+We'll be working at:
 
 ~~~
 ~/obss_2026/nanopore/bacteria-data/
