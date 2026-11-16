@@ -48,19 +48,19 @@ knitr::include_graphics("../fig/01-oxnano_2022.png")
 
 [http://www.nature.com/news/data-from-pocket-sized-genome-sequencer-unveiled-1.14724](http://www.nature.com/news/data-from-pocket-sized-genome-sequencer-unveiled-1.14724)
 
- - Rough specs (2014)
+ - Original specs (2014)
    - 6-8 hour run time
    - sequence per run: ~110Mbp
    - average read length: 5,400bp
    - reads up to 10kbp
    
- - 2023 specs: 
+ - 2026 specs: 
    - can run for up to 72 hours
    - Maximum (theoretical) yield per run: 50Gbp
    - Maximum read length recorded: >4Mbp
 
 ```{r, out.width="50%"}
-knitr::include_graphics("../fig/01-minion.png")
+knitr::include_graphics("../fig-2026/minion-2026.png")
 ```
 
 ```{r, out.width="50%"}
@@ -71,13 +71,13 @@ knitr::include_graphics("../fig/01-nanopore-animation.gif")
 [https://nanoporetech.com/products/specifications](https://nanoporetech.com/products/specifications)
 
 
-### The MinION Mk1B
+### The MinION Mk1D
 
- - The MinION Mk1B is the current version of ONT's original sequencer.
- - Connects to a computer via USB.
+ - The MinION Mk1D is the current version of ONT's original sequencer.
+ - Connects to a computer via USB-C.
 
 ```{r, out.width="50%"}
-knitr::include_graphics("../fig/01-minion-usb.png")
+knitr::include_graphics("../fig-2026/minion-mk1d-and-accessories.png")
 ```
 
 [https://nanoporetech.com/products/minion](https://nanoporetech.com/products/minion)
@@ -87,43 +87,28 @@ knitr::include_graphics("../fig/01-minion-usb.png")
 
 
 ```{r, out.width="50%"}
-knitr::include_graphics("../fig/01-minion-mk1b.png")
+knitr::include_graphics("../fig-2026/minion-and-fc-2026.png")
 ```
 
-### The MinION Mk1C
 
- - The MinION Mk1C provides a truly portable sequencing option, with built in compute and touchscreen.
- - For the price, however, the hardware is not particularly impressive.
-
-<BR><BR><BR>
-```{r, out.width="50%"}
-knitr::include_graphics("../fig/01-minion-mk1c.png")
-```
-
-[https://nanoporetech.com/products/minion](https://nanoporetech.com/products/minion)
+### MinION flow cells
 
 ```{r, out.width="50%"}
-knitr::include_graphics("../fig/01-mk1c-spec-top.png")
+knitr::include_graphics("../fig-2026/minion-fc-2026.png")
 ```
 
-### The MinION Mk1D
-
-- The next iteration of portable sequencing devices is the Mk1D.
-- Tablet-based (plug-in).
-- Currently details are limited, but developer versions ~~are~~ were scheduled to be released during 2023: "Further details on specifications will be provided in 2023."
+<BR>
 
 ```{r, out.width="50%"}
-knitr::include_graphics("../fig/01-minion-mk1d.png")
+knitr::include_graphics("../fig-2026/minion-mk1d-components.png")
 ```
 
-[https://nanoporetech.com/products/minion-mk1d](https://nanoporetech.com/products/minion-mk1d)
 
 ### The GridION
 
  - The GridION offers a "medium-throughput" option for Nanopore-based sequencing: 
  can run up to five flowcells at once.
- - The MinION (Mk1B and Mk1C) and GridION use the same flow cells
- - The Otago Genomics Facility has one of these.
+ - The MinION and GridION use the same flow cells.
 
 
 
@@ -132,19 +117,6 @@ knitr::include_graphics("../fig/01-gridion.png")
 ```
 
 [https://nanoporetech.com/products/gridion](https://nanoporetech.com/products/gridion)
-
-
-
-### The Flongle
-
- - The Flongle uses an adapter to allow a smaller (and cheaper) flow cell to be used in the MinION and GridION devices.
- - Single-use system provides low-cost option for targeted sequencing (e.g., diagnostic applications).
-
-```{r, out.width="50%"}
-knitr::include_graphics("../fig/01-flongle.png")
-```
-
-[https://nanoporetech.com/products/flongle](https://nanoporetech.com/products/flongle)
 
 
 
@@ -165,16 +137,19 @@ knitr::include_graphics("../fig/01-promethion48.jpg")
 knitr::include_graphics("../fig/01-promethion-flowcell.jpg")
 ```
 
+<BR>
+
+```{r, out.width="50%"}
+knitr::include_graphics("../fig-2026/prom-fc-2026.png")
+```
+
 
 
 ### A "mini-PromethION": the P2
 
-
-
 ```{r, out.width="70%"}
 knitr::include_graphics("../fig/01-p2.png")
 ```
-
 
 Smaller device (standalone or connect to host computer) that can run Promethion flow cells.
 
@@ -185,10 +160,14 @@ Smaller device (standalone or connect to host computer) that can run Promethion 
 
 ### Flowcell characteristics
 
- - Pores are arranged in sets of four to form a “channel”. Periodically during the sequencing run, the ONT software decides which of the four pores to use from each channel (called a “mux scan”).
-   - MinION flowcells have 512 channels, so 2048 pores: typically ~1200-1800 are "active" (usable pre-run) (ONT guarantees at least 800 active pores).
+ - Pores are arranged in sets of four to form a “channel”. Periodically during the sequencing run, the ONT 
+ software decides which of the four pores to use from each channel (called a “mux scan”).
+   - MinION flowcells have 512 channels, so 2048 pores: typically ~1200-1800 are "active" (usable pre-run) 
+   (ONT guarantees at least 800 active pores).
    - PromethION flowcells have 2675 channels, so 10,700 pores (ONT guarantees at least 5000 active pores).
- - Sequencing occurs at roughly 450 bases per second (ONT recommends keeping speed above 300 bases per second - additional reagents can be added to "refuel" the flowcell*), although other speeds are now possible (can prioritise data volume vs accuracy).
+ - Sequencing occurs at roughly 450 bases per second (ONT recommends keeping speed above 300 bases per second - 
+ additional reagents can be added to "refuel" the flowcell*), although other speeds are now possible 
+ (can prioritise data volume vs accuracy).
  - NOTE: pores are not constantly active, and can become blocked during the run 
  
  * [https://community.nanoporetech.com/protocols/experiment-companion-minknow/v/mke_1013_v1_revbm_11apr2016/refuelling-your-flow-cell](https://community.nanoporetech.com/protocols/experiment-companion-minknow/v/mke_1013_v1_revbm_11apr2016/refuelling-your-flow-cell)
@@ -241,74 +220,12 @@ knitr::include_graphics("../fig/01-ont-screening.png")
 [https://nanoporetech.com/resource-centre/london-calling-2022-update-oxford-nanopore-technologies](https://nanoporetech.com/resource-centre/london-calling-2022-update-oxford-nanopore-technologies)
 
  
-### 2D sequencing (prior to 2017)
-
- - Hairpin-based approach provided natural error detection methodology:
-   - Link DNA strands with a hairpin adapter.
-   - Sequence template strand followed by complement.
-   - Basecall and compare sequences to produce consensus.
-
-
-
-```{r, out.width="50%"}
-knitr::include_graphics("../fig/01-nanopore-2d-reads.png")
-```
-
-Jain, et al. The Oxford Nanopore MinION: delivery of nanopore sequencing to the genomics community. Genome Biol 17, 239 (2016). 
-[https://doi.org/10.1186/s13059-016-1103-0](https://doi.org/10.1186/s13059-016-1103-0)
-
-
-
-### What happened to 2D reads?
-
-
-
-```{r, out.width="50%"}
-knitr::include_graphics("../fig/01-2d-reads.png")
-```
-
-[https://bioinformatics.stackexchange.com/questions/5525/what-are-2d-reads-in-the-oxford-minion/5528](https://bioinformatics.stackexchange.com/questions/5525/what-are-2d-reads-in-the-oxford-minion/5528)
-
-
-
-### The hairpin lawsuit...
-
- - PacBio (competitor in the long-read space) and ONT have filed a number of lawsuits against each other over the past few years.
-
-
-```{r, out.width="50%"}
-knitr::include_graphics("../fig/01-europe-lawsuit.png")
-```
-
-
-[https://www.genomeweb.com/sequencing/pacbio-oxford-nanopore-settle-patent-dispute-europe](https://www.genomeweb.com/sequencing/pacbio-oxford-nanopore-settle-patent-dispute-europe)
-
- 
-
-### 1D<sup>2</sup> sequencing
-
- - In 2017 ONT announced the new 1D<sup>2</sup> chemistry
- - Showed higher accuracy that 1D (and SAID it was better than 2D)
- - It didn't last long... 
-
-
-
-```{r, out.width="50%"}
-knitr::include_graphics("../fig/01-1D2-accuracy.png")
-```
-
- - Video at link below:
-
-[https://nanoporetech.com/about-us/news/1d-squared-kit-available-store-boost-accuracy-simple-prep](https://nanoporetech.com/about-us/news/1d-squared-kit-available-store-boost-accuracy-simple-prep)
-
 
 
 ### Pore imporvements: the R10 pore
 
  - ONT introduced the new R10 pore in 2019 (previous was R9.4.1).
  - Main differences were *longer barrel* and *dual reader head:* gave improved resolution of homopolymer runs.
-
-
 
 
 ```{r, out.width="50%"}
@@ -318,32 +235,6 @@ knitr::include_graphics("../fig/01-r10-pore.png")
 [https://nanoporetech.com/about-us/news/r103-newest-nanopore-high-accuracy-nanopore-sequencing-now-available-store](https://nanoporetech.com/about-us/news/r103-newest-nanopore-high-accuracy-nanopore-sequencing-now-available-store)
 
 
-
-### R10.3 vs R9.4.1 performance 
-
- - With a bit more tweaking (to get to R10.3) ONT improved 1D (i.e., single-strand) sequencing accuracy, although throughput is still not as high as the R.9.4.1 pore.
-
-```{r, out.width="70%"}
-knitr::include_graphics("../fig/01-r10.3-results.png")
-```
-
-[https://nanoporetech.com/about-us/news/r103-newest-nanopore-high-accuracy-nanopore-sequencing-now-available-store](https://nanoporetech.com/about-us/news/r103-newest-nanopore-high-accuracy-nanopore-sequencing-now-available-store)
-
-
-
-### Q20+: the return of 2D reads...
-
-- The previous ONT products are "Q10" (we'll discuss this soon), meaning that the error rate is roughly 1 incorrect base call per 10 bases (that's high!)
-- The new "Q20+" products are now available  - moves to less than 1 error per 100 bases (a little more respectable, but still well below short-read technologies like Illumina).
-- Upgrade includes a return to the "2D" approach.
-
-<br>
-
-```{r, out.width="50%"}
-knitr::include_graphics("../fig/01-lawsuit2020.png")
-```
-
-[https://www.genomeweb.com/sequencing/jury-invalidates-pacific-biosciences-patents-lawsuit-against-oxford-nanopore#.YOt8e26xXUI](https://www.genomeweb.com/sequencing/jury-invalidates-pacific-biosciences-patents-lawsuit-against-oxford-nanopore#.YOt8e26xXUI)
 
 
 ### Nanopore workflow
@@ -359,24 +250,14 @@ knitr::include_graphics("../fig/01-nanopore-workflow.png")
 
 
 
-### Basecalling: `guppy` (deprecated)
-
- - `guppy` is a neural network based basecaller.
-    - analyses the electrical trace data and predicts base 
-    - it is GPU-aware, and can basecall in real time 
-    - can also call base modifications (e.g., 5mC, 6mA)
-    - high accuracy (HAC) mode (slower) and super-high accuracy (SUP) mode (even slower) can improve basecalls post-sequencing
- - MANY other machine learning basecallers have been proposed.
- - Output is the standard "FASTQ" format for sequence data.
- - `guppy` has now been "retired" by ONT, and replaced with `dorado`.
-
-
 ### Basecalling: `dorado`
 
- - ONT has recently released a new base caller: `dorado`
- - Optimised for 10.4.1 flowcells (but there are basecalling models for 9.4.1)
- - Designed to support Apple GPUs (M1/M2/M3)
- - Like Guppy, can call base modifications
+ - ONT base caller: `dorado`
+ - Optimised for 10.4.1 flowcells 
+ - Designed to support Apple Silicon GPUs
+ - Can call base modifications:
+   - DNA: 5mC, 5hmC, 4mC, 6mA
+   - RNA: m5c. m6a, inosine, pseU 2-mecC. 20meA, 20meG, 20meU
  - Also has FAST, HAC and SUP modes for basecalling.
 
 ### 10.4.1 flowcells + v14 chemistry: accuracy
@@ -417,21 +298,21 @@ knitr::include_graphics("../fig/01-ont-duplex-q30.png")
 [https://nanoporetech.com/q20plus-chemistry](https://nanoporetech.com/q20plus-chemistry)
 
 
-### More Nanopore: London Calling 2023
+### More Nanopore: London Calling 2026
 
 
 
 ```{r, out.width="50%"}
 
-knitr::include_graphics("../fig/01-lc23.png")
+knitr::include_graphics("../fig-2026/01-lc26.jpg")
 ```
 
- - Online conference held in May 2023
+ - Conference held in May 2026
  - Talk videos available online
  - LOTS of really cool announcements and research applications
- - Can also watch presentations from previous years.
+ - Can also watch presentations from previous years:
 
-[https://nanoporetech.com/lc23](https://nanoporetech.com/lc23)
+[https://www.youtube.com/playlist?list=PLxpxXZj-IgXyh79ddDNm7mM0W0jFtKPnr](https://www.youtube.com/playlist?list=PLxpxXZj-IgXyh79ddDNm7mM0W0jFtKPnr)
 
 
 
