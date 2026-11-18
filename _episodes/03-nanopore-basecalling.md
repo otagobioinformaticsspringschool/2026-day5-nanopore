@@ -472,13 +472,11 @@ more scripts/dorado_fastmodel.sl
 #SBATCH --mem           6G
 #SBATCH --cpus-per-task 4
 #SBATCH --output        dorado_%j.out
+#SBATCH --error         dorado_%j.err
 #SBATCH --account       nesi02659
 #SBATCH --gpus-per-node l4:1
 
-module purge
 module load dorado
-
-dorado download --model dna_r10.4.1_e8.2_400bps_fast@v5.2.0 --directory dorado-models/
 
 dorado basecaller  --device 'cuda:all' dorado-models/dna_r10.4.1_e8.2_400bps_fast@v5.2.0 pod5_files --kit-name SQK-RBK114-96 --output-dir bam-unaligned
 ~~~
@@ -486,7 +484,6 @@ dorado basecaller  --device 'cuda:all' dorado-models/dna_r10.4.1_e8.2_400bps_fas
 
  - The `SBATCH` commands are providing information to the `slurm` job scheduler: job name, maximum run time, memory allocation etc
  - The `module` commands are making sure the necessary modules are available to the script (here we are specifying version 0.4.3 of `Dorado` - the GPU-enabled version of ONT's dorado software).
- - The `dorado download` command downloads the model that we want to use for basecalling, and saves it to the `dorado-models` directory.
  - The `dorado basecaller` command is what is doing the work (i.e., converting the .pod5 data to unaligned .bam).
 
 Let's have a closer look at the `dorado basecaller` command:
@@ -505,9 +502,9 @@ Options used:
 
  - `--device 'cuda:all'`: this refers to which GPU device should be used (here we let the software select use `all` available devices, but it can sometimes be useful to select specific GPU devices).
  - `dorado-models/dna_r10.4.1_e8.2_400bps_fast@v5.2.0`: this specifies the model (and its location, relative to wheer we call the script from) that is being used to perform the basecalling.  
- In this case we are using the "fast" model (rather than high-accuracy (hac) or super-high accuracy (sup)) to save time, and `dna` denotes that we sequenced... DNA. `r10.4.1` refers 
+ In this case we are using the "fast" model (rather than high-accuracy (hac) or super-high accuracy (sup)) to save time, and `dna` denotes that we sequenced DNA. `r10.4.1` refers 
  to the flowcell version that was used to generate the data, and e8.2 is the kit chemistry that was used for library generation (e8 is kit9 or kit 10, e8.2 is kit 14).
- - `pod5_files`: this is the directory containing the `.pod5` (or `.fast5` - `dorado` with process either type) files that we would like to process.
+ - `pod5_files`: this is the directory containing the `.pod5` (or `.fast5` - `dorado` will process either type) files that we would like to process.
  - `--kit-name SQK-RBK114-96`: barcoding kit that was used.
  - `bam-unaligned`: output location.
 
@@ -541,22 +538,21 @@ squeue --me
 ~~~
 {: .bash}
 
-~~~
+~~~   
 JOBID         USER     ACCOUNT   NAME        CPUS MIN_MEM PARTITI START_TIME     TIME_LEFT STATE    NODELIST(REASON)    
-41491249      michael. nesi02659 dorado_basec   4      6G gpu     2023-11-26T0        8:31 RUNNING  wbl001              
-41491302      michael. nesi02659 spawner-jupy    4      8G interac 2023-11-26T0       28:44 RUNNING  wbn001      
+10901129      michael. nesi02659 dorado_basec   4      1G genoa   Nov 18 14:12        8:43 RUNNING  g12             
 ~~~
 {: .output}
 
 
-It will also write "progress" output to a log file that contains the job ID (represented by `XXXXXXX` in the code below), although (unlike with the 
+It also writes "progress" output to a log file that contains the job ID (represented by `XXXXXXX` in the code below), although (unlike with the 
 older `guppy` software, you don't get any information about how far through the processing you are).
 You can check the file name using `ls -ltr` (list file details, in reverse time order).  
 Using the `tail -f` command, we can watch the "progress" (use control-c to exit):
 
 ~~~
 ls -ltr
-tail -f dorado_XXXXXXX.out
+tail -f dorado_XXXXXXX.err
 ~~~
 {: .bash}
 
@@ -564,15 +560,12 @@ tail -f dorado_XXXXXXX.out
 Example of output:
 
 ~~~
-[2023-11-26 02:01:36.919] [info] > Creating basecall pipeline
-[2023-11-26 02:01:46.687] [info]  - set batch size for cuda:0 to 768
-[2023-11-26 02:03:33.567] [info] > Simplex reads basecalled: 13000
-[2023-11-26 02:03:33.570] [info] > Basecalled @ Samples/s: 2.007616e+07
-[2023-11-26 02:03:33.674] [info] > Finished
 ~~~
 {: .output}
 
 Use "Control-c" to exit (it's okay, it won't kill the job).
+
+**NOTE:** 
 
 The job should take a few minutes to run.
 
@@ -617,7 +610,7 @@ bam-unaligned
 {:.output}
 
 Each `.bam` file contains the reads labelled with a specific DNA barcode (`barcode01`-`barcode96`) or reads
-whose barcodesc ould not be determined (`unclassified`).
+whose barcodes could not be determined (`unclassified`).
 
 Because I created a data subset that only contained reads from the first three barcodes (plus some unclassified reads), 
 those are the only `.bam` files that contain data.  We can check the size of each folder to confirm this (use `du` to 

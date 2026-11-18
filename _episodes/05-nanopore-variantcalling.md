@@ -19,7 +19,7 @@ source: Rmd
 
 ### Sequence alignment
 
- - If a “reference” genome exists for the organism you are sequencing, reads can be “aligned” to the reference.
+ - If a "reference" genome exists for the organism you are sequencing, reads can be "aligned" to the reference.
  - This involves finding the place in the reference genome that each read matches to.
  - Due to high sequence similarity within members of the same species, most reads should map to the reference.
 
@@ -102,6 +102,9 @@ bam-unaligned/NO_MISSV2_P2I/P2I_96/20260413_1636_P2I-00014-B_PBK98658_853a956f/b
 ├── barcode03
 │   ├── PBK98658_pass_barcode03_853a956f_57f83f46_0.bam
 │   └── PBK98658_pass_barcode03_853a956f_57f83f46_0.bam.bai
+.
+.
+.
 └── unclassified
     ├── PBK98658_pass_unclassified_853a956f_57f83f46_0.bam
     └── PBK98658_pass_unclassified_853a956f_57f83f46_0.bam.bai
@@ -114,7 +117,9 @@ pattern, we can select just the files whose barcodes were reliably detected (i.e
 ~~~
 mkdir salmonella-bamfiles
 
-cp $FOLDER/barcode*/*.bam salmonella-bamfiles/ 
+cp $FOLDER/barcode01/*.bam salmonella-bamfiles/ 
+cp $FOLDER/barcode02/*.bam salmonella-bamfiles/ 
+cp $FOLDER/barcode03/*.bam salmonella-bamfiles/ 
 
 ls -1 salmonella-bamfiles/
 ~~~
@@ -155,8 +160,8 @@ samtools coverage bam-aligned/salmonella-aligned-sort.bam
 
 ~~~
 #rname       startpos      endpos  numreads   covbases  coverage  meandepth    meanbaseq    meanmapq
-NC_003197.2         1     4857450      7821    4298511   88.4932    2.92054         43.1        58.6
-NC_003277.2         1       93933        62      16929   18.0224   0.668626         40.1        52
+NC_003197.2         1     4857450     19698    4661869   95.9736    8.08004         19.4        57.3
+NC_003277.2         1       93933       110      16030   17.0654    1.31684         19.5        50.4
 ~~~
 {: .output}
 
@@ -225,7 +230,7 @@ head -40 vcf-files/salmonella-final-variants.vcf
 ##fileformat=VCFv4.2
 ##FILTER=<ID=PASS,Description="All filters passed">
 ##bcftoolsVersion=1.22+htslib-1.22
-##bcftoolsCommand=mpileup --threads 1 -B -Q5 --max-BQ 30 -I -o bcf-files/salmonella-pass.bcf -f genome/GCF_000006945.2_ASM694v2_genomic.fna bam-aligned/salmonella-aligned-sort.bam
+##bcftoolsCommand=mpileup --threads 4 -B -Q5 --max-BQ 30 -I -o bcf-files/salmonella-pass.bcf -f genome/GCF_000006945.2_ASM694v2_genomic.fna bam-aligned/salmonella-aligned-sort.bam
 ##reference=file://genome/GCF_000006945.2_ASM694v2_genomic.fna
 ##contig=<ID=NC_003197.2,length=4857450>
 ##contig=<ID=NC_003277.2,length=93933>
@@ -250,18 +255,18 @@ head -40 vcf-files/salmonella-final-variants.vcf
 ##INFO=<ID=DP4,Number=4,Type=Integer,Description="Number of high-quality ref-forward , ref-reverse, alt-forward and alt-reverse bases">
 ##INFO=<ID=MQ,Number=1,Type=Integer,Description="Average mapping quality">
 ##bcftools_callVersion=1.22+htslib-1.22
-##bcftools_callCommand=call --ploidy 1 -m -v -o vcf-files/salmonella-variants.vcf bcf-files/salmonella-pass.bcf; Date=Tue Nov 17 12:39:22 2026
+##bcftools_callCommand=call --ploidy 1 -m -v -o vcf-files/salmonella-variants.vcf bcf-files/salmonella-pass.bcf; Date=Wed Nov 18 14:53:45 2026
 #CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO    FORMAT  barcode01       barcode02       barcode03
-NC_003197.2     81      .       G       A       27.1835 .       DP=2;VDB=0.02;SGB=0.231553;MQ0F=0;AC=1;AN=1;DP4=0,0,0,2;MQ=60   GT:PL:AD        .:0,0:0,0       .:0,0:0,0   1:55,0:0,2
-NC_003197.2     483     .       A       G       27.1835 .       DP=2;VDB=0.1;SGB=0.231553;MQ0F=0;AC=1;AN=1;DP4=0,0,0,2;MQ=60    GT:PL:AD        .:0,0:0,0       .:0,0:0,0   1:55,0:0,2
-NC_003197.2     507     .       C       T       27.1835 .       DP=2;VDB=0.1;SGB=0.231553;MQ0F=0;AC=1;AN=1;DP4=0,0,0,2;MQ=60    GT:PL:AD        .:0,0:0,0       .:0,0:0,0   1:55,0:0,2
-NC_003197.2     537     .       A       C       27.1835 .       DP=2;VDB=0.1;SGB=0.231553;MQ0F=0;AC=1;AN=1;DP4=0,0,0,2;MQ=60    GT:PL:AD        .:0,0:0,0       .:0,0:0,0   1:55,0:0,2
-NC_003197.2     649     .       C       T       57.1756 .       DP=3;VDB=0.559209;SGB=-0.281359;MQ0F=0;AC=2;AN=2;DP4=0,0,0,3;MQ=60      GT:PL:AD        1:30,0:0,1      .:0,0:0,0    1:55,0:0,2
-NC_003197.2     831     .       T       C       27.1835 .       DP=2;VDB=0.18;SGB=0.231553;MQ0F=0;AC=1;AN=1;DP4=0,0,0,2;MQ=60   GT:PL:AD        .:0,0:0,0       .:0,0:0,0   1:55,0:0,2
-NC_003197.2     909     .       C       T       27.1835 .       DP=2;VDB=0.18;SGB=0.231553;MQ0F=0;AC=1;AN=1;DP4=0,0,0,2;MQ=60   GT:PL:AD        .:0,0:0,0       .:0,0:0,0   1:55,0:0,2
-NC_003197.2     1146    .       T       A       27.1835 .       DP=2;VDB=0.26;SGB=0.231553;MQ0F=0;AC=1;AN=1;DP4=0,0,0,2;MQ=60   GT:PL:AD        .:0,0:0,0       .:0,0:0,0   1:55,0:0,2
-NC_003197.2     1152    .       C       T       27.1835 .       DP=2;VDB=0.26;SGB=0.231553;MQ0F=0;AC=1;AN=1;DP4=0,0,0,2;MQ=60   GT:PL:AD        .:0,0:0,0       .:0,0:0,0   1:55,0:0,2
-NC_003197.2     1194    .       T       C       27.1835 .       DP=2;VDB=0.26;SGB=0.231553;MQ0F=0;AC=1;AN=1;DP4=0,0,0,2;MQ=60   GT:PL:AD        .:0,0:0,0       .:0,0:0,0   1:55,0:0,2
+NC_003197.2     18      .       G       T       28.1818 .       DP=3;VDB=0.0221621;SGB=-0.281359;MQSBZ=0;MQ0F=0;AC=2;AN=2;DP4=0,0,1,2;MQ=60   GT:PL:AD        1:22,0:0,1      .:0,0:0,0       1:34,0:0,2
+NC_003197.2     43      .       G       A       3.4791  .       DP=5;VDB=0.02;SGB=0.366792;RPBZ=-0.816497;MQBZ=0;MQSBZ=0;BQBZ=0;SCBZ=-0.645497;MQ0F=0;AC=1;AN=3;DP4=1,2,1,1;MQ=60     GT:PL:AD        0:0,29:1,0      1:37,0:0,2      0:0,26:2,0
+NC_003197.2     81      .       G       A       50.8935 .       DP=6;VDB=0.00766117;SGB=-0.374956;RPBZ=-0.5;MQBZ=0;MQSBZ=0;BQBZ=0.92582;SCBZ=0;MQ0F=0;AC=2;AN=3;DP4=1,1,1,3;MQ=60     GT:PL:AD        1:28,0:0,1      0:0,37:2,0      1:59,0:0,3
+NC_003197.2     483     .       A       G       111.176 .       DP=8;VDB=0.0231369;SGB=-1.39713;MQSBZ=0;MQ0F=0;AC=3;AN=3;DP4=0,0,3,4;MQ=60    GT:PL:AD        1:47,0:0,2      1:29,0:0,2      1:63,0:0,3
+NC_003197.2     507     .       C       T       66.0691 .       DP=7;VDB=0.178985;SGB=0.123302;RPBZ=1.0146;MQBZ=0;MQSBZ=0;BQBZ=1.1619;SCBZ=0.977008;MQ0F=0;AC=2;AN=3;DP4=0,2,2,3;MQ=60        GT:PL:AD        1:45,0:0,2      0:0,23:2,0      1:57,0:0,3
+NC_003197.2     537     .       A       C       59.1756 .       DP=8;VDB=0.105075;SGB=-1.28032;MQSBZ=0;MQ0F=0;AC=3;AN=3;DP4=0,0,3,3;MQ=60     GT:PL:AD        1:37,0:0,2      1:44,0:0,3      1:6,0:0,1
+NC_003197.2     649     .       C       T       120.176 .       DP=8;VDB=0.128485;SGB=-1.45883;MQSBZ=0;MQ0F=0;AC=3;AN=3;DP4=0,0,3,5;MQ=60     GT:PL:AD        1:38,0:0,2      1:72,0:0,3      1:38,0:0,3
+NC_003197.2     684     .       T       C       36.8834 .       DP=8;VDB=0.0433485;SGB=1.07566;RPBZ=-0.458258;MQBZ=0;MQSBZ=0;BQBZ=0;SCBZ=-0.150878;MQ0F=0;AC=1;AN=3;DP4=2,3,1,2;MQ=60 GT:PL:AD        0:0,40:2,0      1:73,0:0,3      0:0,72:3,0
+NC_003197.2     796     .       T       C       36.9004 .       DP=7;VDB=0.0506481;SGB=1.07566;RPBZ=0.178377;MQBZ=0;MQSBZ=0;BQBZ=1.60539;SCBZ=-0.178377;MQ0F=0;AC=1;AN=3;DP4=1,3,1,2;MQ=60    GT:PL:AD        0:0,21:1,0      1:73,0:0,3      0:0,48:3,0
+NC_003197.2     810     .       C       T       9.71231 .       DP=6;VDB=0.18;SGB=0.346553;RPBZ=0;MQBZ=0;MQSBZ=0;BQBZ=1.85164;SCBZ=0.234834;MQ0F=0;AC=1;AN=3;DP4=1,3,1,1;MQ=60        GT:PL:AD        0:0,8:1,0       1:45,0:0,2      0:0,29:3,0
 ~~~
 {: .output}
 

@@ -9,7 +9,6 @@ objectives:
 - "Generate summary metrics."
 keypoints:
 - "FastQC and NanoPlot provide pre-formatted reports on run characteristics and read quality."
-- "Bioawk can be used to generate summary metrics and ask specific questions about the read data."
 source: Rmd
 ---
 
@@ -45,6 +44,9 @@ bam-unaligned/
                 │   └── PBK98658_pass_barcode02_853a956f_57f83f46_0.bam
                 ├── barcode03
                 │   └── PBK98658_pass_barcode03_853a956f_57f83f46_0.bam
+.
+.
+.
                 └── unclassified
                     └── PBK98658_pass_unclassified_853a956f_57f83f46_0.bam
 ~~~
@@ -57,31 +59,7 @@ Let's use the NanoPlot software to assess the quality of our unaligned `.bam` da
 interactively (i.e., we don't need to submit it as a slurm job), and it wil produce an HTML-based report 
 that can be viewed in a browser.
 
-### Reminder; `.bam` file location
-
-~~~
-tree bam-unaligned
-~~~
-{: .bash}
-
-~~~
-bam-unaligned/
-└── NO_MISSV2_P2I
-    └── P2I_96
-        └── 20260413_1636_P2I-00014-B_PBK98658_853a956f
-            └── bam_pass
-                ├── barcode01
-                │   └── PBK98658_pass_barcode01_853a956f_57f83f46_0.bam
-                ├── barcode02
-                │   └── PBK98658_pass_barcode02_853a956f_57f83f46_0.bam
-                ├── barcode03
-                │   └── PBK98658_pass_barcode03_853a956f_57f83f46_0.bam
-                └── unclassified
-                    └── PBK98658_pass_unclassified_853a956f_57f83f46_0.bam
-~~~
-{: .output}
-
-Specify a `.bam` file to run NanoPlot on:
+Specify a `.bam` file to run NanoPlot on (**PLEASE:** use **TAB COMPLETE** to move down through the directories):
 
 ~~~
 BAMFILE=bam-unaligned/NO_MISSV2_P2I/P2I_96/20260413_1636_P2I-00014-B_PBK98658_853a956f/bam_pass/barcode01/PBK98658_pass_barcode01_853a956f_57f83f46_0.bam 
@@ -110,7 +88,7 @@ Command syntax:
 
 - `NanoPlot`: run the NanoPlot command (note that the capital N and P are required).
 - `-o nnanoplot_fastmodel/barcode01`: folder for output (`-o`) to be written.
-- `-p bacteria_fastmodel_barcode01_`: prefix (`-p`) to be appended to start of each filename in the output folder.
+- `-p bacteria_fastmodel_barcode01_`: prefix (`-p`) to be appended to start of each filename in the output folder.      
 - `--ubam $BAMFILE`: the unaligned bam (`ubam`) file to process with NanoPlot.
 
 Let's check what output was generated:
@@ -160,11 +138,12 @@ In order to process each of the `.bam` files separately, you can use a loop:
 ~~~
 FOLDER=bam-unaligned/NO_MISSV2_P2I/P2I_96/20260413_1636_P2I-00014-B_PBK98658_853a956f/bam_pass/
 
-for i in barcode02  barcode03 unclassified; \
+for i in barcode02  barcode03 unclassified 
 do 
     NanoPlot -o nanoplot_fastmodel/$i \
              -p bacteria_fastmodel_$i_ \
-             --ubam $FOLDER/$i/*.bam; done
+             --ubam $FOLDER/$i/*.bam
+done
 ~~~
 {: .bash}
 
@@ -202,7 +181,10 @@ mkdir fastqc_fastmodel
 ~~~
 {: .bash}
 
-Unlike Nanoplot, FastQC *can* handle multiple `.bam` files at once.
+Unlike Nanoplot, FastQC *can* handle multiple `.bam` files at once (so a command like his will work: `fastqc -t 4 -o fastqc_fastmodel $FOLDER/*/*.bam`).
+
+BUT, because we've also got all of the `.bam` files from the other barcodes (and we don't want to run FastQC for these empty files), can can use 
+the same approach as above.
 
 Let's re-use the `$FOLDER` variable we created. 
 
@@ -224,6 +206,9 @@ bam-unaligned/NO_MISSV2_P2I/P2I_96/20260413_1636_P2I-00014-B_PBK98658_853a956f/b
 ├── barcode03
 │   ├── PBK98658_pass_barcode03_853a956f_57f83f46_0.bam
 │   └── PBK98658_pass_barcode03_853a956f_57f83f46_0.bam.bai
+.
+.
+.
 └── unclassified
     ├── PBK98658_pass_unclassified_853a956f_57f83f46_0.bam
     └── PBK98658_pass_unclassified_853a956f_57f83f46_0.bam.bai
@@ -235,7 +220,10 @@ Fun fact - Nanoplot created a `.bai` (bam index) file for us when it processed t
 Run FastQC on our data:
 
 ~~~
-fastqc -t 4 -o fastqc_fastmodel $FOLDER/*/*.bam
+for i in barcode01 barcode02  barcode03 unclassified
+do 
+    fastqc -t 4 -o fastqc_fastmodel $FOLDER/$i/*.bam
+done
 ~~~
 {: .bash}
 
@@ -271,219 +259,4 @@ As we did with the NanoPlot output, we can view the HTML report in the browser:
 2. Control-click (Mac) or right-click (Windows/Linux) on the "PBK98658_pass_barcode01_853a956f_57f83f46_0_fastqc.html" 
 file and choose "Open in New Browser Tab".
 3. The report should now be displayed in a new tab in your browser.
-
-## Bioawk (we might skip this one)
-
-FastQC and NanoPlot are great for producing pre-formatted reports that summarise read/run quality.  
-
-But what if you want to ask some more specific questions about your data?
-
-Bioawk is an extension to the Unix `awk` command which allows use to query specific biological data types - here we will use it to ask some specific questions about our FASTQ data.
-
-Load the bioawk module.
-
-~~~
-module load bioawk
-~~~
-{: .bash}
-
-To run `bioawk` (no inputs, so won't do anything useful):
-
-~~~
-bioawk 
-~~~
-{: .bash}
-
-~~~
-usage: bioawk [-F fs] [-v var=value] [-c fmt] [-tH] [-f progfile | 'prog'] [file ...]
-~~~
-{: .output}
-
-View help info on "format" (`-c`):
-
-~~~
-bioawk -c help
-~~~
-{: .bash}
-
-~~~
-bed:
-        1:chrom 2:start 3:end 4:name 5:score 6:strand 7:thickstart 8:thickend 9:rgb 10:blockcount 11:blocksizes 12:blockstarts 
-sam:
-        1:qname 2:flag 3:rname 4:pos 5:mapq 6:cigar 7:rnext 8:pnext 9:tlen 10:seq 11:qual 
-vcf:
-        1:chrom 2:pos 3:id 4:ref 5:alt 6:qual 7:filter 8:info 
-gff:
-        1:seqname 2:source 3:feature 4:start 5:end 6:score 7:filter 8:strand 9:group 10:attribute 
-fastx:
-        1:name 2:seq 3:qual 4:comment  
-~~~
-{: .output}
-
-Syntax is different depending on what type of data file you have.  Here we have an unaligned BAM file.
-
-Unfortunately bioawk doesn't work with BAM formatted data (which is a compressed vesion of SAM) - we need to convert our BAM to SAM...
-
-This can be done using SAMtools.
-
-Load SAMtools module:
-
-~~~
-module load SAMtools
-~~~
-{: .bash}
-
-The `samtools view` command can be used to do the conversion. To output to the console:
-
-~~~
-samtools view bam-unaligned/ecoli-pod5-pass-basecalls.bam | more
-~~~
-{: .bash}
-
-We can redirect the outoput to create a SAM file:
-
-~~~
-samtools view bam-unaligned/ecoli-pod5-pass-basecalls.bam > ecoli-pod5-pass-basecalls.sam
-~~~
-{: .bash}
-
-For a SAM file (using the information from `bioawk --help`), if we're interested in each read's 
-name and length, we would query `qname` and `seq`.
-
-Extract read name and length using `bioawk`:
-
-~~~
-bioawk -c sam '{print $qname,length($seq)}' ecoli-pod5-pass-basecalls.sam | head
-~~~
-{: .bash}
-
-~~~
-01b81395-0397-45c3-a62f-3184fafb8f4a    11129
-0202d7fc-f4f9-4242-8dac-5dcda36dcebc    4104
-028f0c75-29b5-4877-8f2f-c070a4563e70    1316
-0249f90e-2f03-4dc7-860b-5aba518ba5ec    4999
-02dba632-4671-43a0-840d-a7798f70cb79    8627
-035e2d3f-b6b8-45b7-9eb7-2973c02b6666    3282
-01207b3d-ded6-439a-97f6-2b3ccda77290    19269
-03186e67-e391-4898-9554-57f8cfb8a3d5    9462
-02944994-7ed1-47ce-ad53-59dba640995a    8858
-0491758b-dde6-4693-9304-fb3eacdb5f02    6586
-~~~
-{: .output}
-
-Note that is we had a `.fastq` (or `.fastq.gz`) file, then we could extract the same information via 
-(note the slightly different syntax - file format and parameter names):
-
-~~~
-# DON'T RUN THIS CODE - IT IS JUST AN EXAMPLE FOR PROCESSING FASTQ/FASTQ.GZ DATA
-bioawk -c fastx '{print $name,length($seq)}' ecoli-ecoli-pod5-pass-basecalls.fastq.gz | head
-~~~
-{: .bash} 
-
-To count the number of reads, we can pipe the output to the `wc` command:
-
-~~~
-bioawk -c sam '{print $qname,length($seq)}' ecoli-pod5-pass-basecalls.sam | wc -l
-~~~
-{: .bash}
-
-~~~
-13220
-~~~
-{: .output}
-
-Total number of bases in first ten reads (I've stepped through the process to illustrate each component of the command):
-
-~~~
-bioawk -c sam '{print length($seq)}' ecoli-pod5-pass-basecalls.sam | head
-~~~
-{: .bash}
-
-~~~
-11129
-4104
-1316
-4999
-8627
-3282
-19269
-9462
-8858
-6586
-~~~
-{: .output}
-
-~~~
-bioawk -c sam '{print length($seq)}' ecoli-pod5-pass-basecalls.sam | head | paste -sd+ 
-~~~
-{: .bash}
-
-~~~
-11129+4104+1316+4999+8627+3282+19269+9462+8858+6586
-~~~
-{: .output}
-
-~~~
-bioawk -c sam '{print length($seq)}' ecoli-pod5-pass-basecalls.sam | head | paste -sd+ | bc
-~~~
-{: .bash}
-
-~~~
-77632
-~~~
-{: .output}
-
-So the first 10 reads comprise 77,632 bases.
-
-Total number of bases in all reads (remove the `head` command):
-
-~~~
-bioawk -c sam '{print length($seq)}' ecoli-pod5-pass-basecalls.sam | paste -sd+ | bc
-~~~
-{: .bash}
-
-~~~
-129866671
-~~~
-{: .output}
-
-In total, the 13,220 reads in our data set comprise 129,866,671 bases (130Mbp).
-
-
-Number of reads longer than 10000 bases
-
-First create "yes/no" (1/0) information about whether each read has a length greater than 10,000 bases:
-
-~~~
-bioawk -c sam '{print (length($seq) > 10000)}' ecoli-pod5-pass-basecalls.sam | head
-~~~
-{: .bash}
-
-~~~
-1
-0
-0
-0
-0
-0
-1
-0
-0
-0
-~~~
-{: .output}
-
-Now sum this up to find the total number of reads satisfying this condition:
-
-~~~
-bioawk -c sam '{print (length($seq) > 10000)}' ecoli-pod5-pass-basecalls.sam | paste -sd+ | bc
-~~~
-{: .bash}
-
-~~~
-4527
-~~~
-{: .output}
-
-So, of our 13,220 reads, 4527 of them are longer than 10,000 bases.
 
