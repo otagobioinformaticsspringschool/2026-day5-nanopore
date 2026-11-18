@@ -198,7 +198,7 @@ PBK98658_853a956f_57f83f46_2_subset.pod5
 On REANNZ:
 
 ~~~
-module spider Dorado
+module spider dorado
 ~~~
 {: .bash}
 
@@ -445,6 +445,19 @@ dorado download --model dna_r10.4.1_e8.2_400bps_fast@v5.2.0 --directory dorado-m
 ~~~
 {: .bash}
 
+Check the donload:
+
+~~~
+ls dorado-models/
+~~~
+{: .bash}
+
+~~~
+dna_r10.4.1_e8.2_400bps_fast@v5.2.0
+~~~
+{: .output}
+
+
 `dorado` can use GPUs to speed up the basecalling process.
 
 On REANNZ, we can access the GPUs by submitting a job to the cluster using a slurm script.
@@ -483,7 +496,7 @@ dorado basecaller  --device 'cuda:all' dorado-models/dna_r10.4.1_e8.2_400bps_fas
 {: .output}
 
  - The `SBATCH` commands are providing information to the `slurm` job scheduler: job name, maximum run time, memory allocation etc
- - The `module` commands are making sure the necessary modules are available to the script (here we are specifying version 0.4.3 of `Dorado` - the GPU-enabled version of ONT's dorado software).
+ - The `module` commands are making sure the necessary modules are available to the script (in this case, dorado).
  - The `dorado basecaller` command is what is doing the work (i.e., converting the .pod5 data to unaligned .bam).
 
 Let's have a closer look at the `dorado basecaller` command:
@@ -560,6 +573,13 @@ tail -f dorado_XXXXXXX.err
 Example of output:
 
 ~~~
+[2026-11-18 14:35:55.953] [info] > Creating basecall pipeline
+[2026-11-18 14:36:15.222] [info] > Finished in (ms): 19218
+[2026-11-18 14:36:15.222] [info] > Simplex reads basecalled: 32984
+[2026-11-18 14:36:15.222] [info] > Simplex reads filtered: 124
+[2026-11-18 14:36:15.222] [info] > Basecalled @ Samples/s: 4.017993e+07
+[2026-11-18 14:36:15.222] [info] > 33541 reads demuxed @ classifications/s: 1.745291e+03
+[2026-11-18 14:36:15.359] [info] > Finished
 ~~~
 {: .output}
 

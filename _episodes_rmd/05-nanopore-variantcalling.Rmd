@@ -82,7 +82,7 @@ module load SAMtools
 Load the Dorado module:
 
 ~~~
-module load Dorado
+module load dorado
 ~~~
 {: .bash}
 
