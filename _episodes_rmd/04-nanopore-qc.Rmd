@@ -1,6 +1,6 @@
 ---
 title: "Nanopore: quality assessment"
-teaching: 10
+teaching: 15
 exercises: 15
 questions:
 - "How can I perform quality assessment of ONT data?"
