@@ -216,7 +216,52 @@ vcfutils.pl varFilter vcf-files/salmonella-variants.vcf  > vcf-files/salmonella-
 {: .bash}
 
 ~~~
-more vcf-files/salmonella-final-variants.vcf
+head -40 vcf-files/salmonella-final-variants.vcf
 ~~~
 {: .bash}
+
+
+~~~
+##fileformat=VCFv4.2
+##FILTER=<ID=PASS,Description="All filters passed">
+##bcftoolsVersion=1.22+htslib-1.22
+##bcftoolsCommand=mpileup --threads 1 -B -Q5 --max-BQ 30 -I -o bcf-files/salmonella-pass.bcf -f genome/GCF_000006945.2_ASM694v2_genomic.fna bam-aligned/salmonella-aligned-sort.bam
+##reference=file://genome/GCF_000006945.2_ASM694v2_genomic.fna
+##contig=<ID=NC_003197.2,length=4857450>
+##contig=<ID=NC_003277.2,length=93933>
+##ALT=<ID=*,Description="Represents allele(s) other than observed.">
+##INFO=<ID=INDEL,Number=0,Type=Flag,Description="Indicates that the variant is an INDEL.">
+##INFO=<ID=IDV,Number=1,Type=Integer,Description="Maximum number of raw reads supporting an indel">
+##INFO=<ID=IMF,Number=1,Type=Float,Description="Maximum fraction of raw reads supporting an indel">
+##INFO=<ID=DP,Number=1,Type=Integer,Description="Raw read depth">
+##INFO=<ID=VDB,Number=1,Type=Float,Description="Variant Distance Bias for filtering splice-site artefacts in RNA-seq data (bigger is better)",Version="3">
+##INFO=<ID=RPBZ,Number=1,Type=Float,Description="Mann-Whitney U-z test of Read Position Bias (closer to 0 is better)">
+##INFO=<ID=MQBZ,Number=1,Type=Float,Description="Mann-Whitney U-z test of Mapping Quality Bias (closer to 0 is better)">
+##INFO=<ID=BQBZ,Number=1,Type=Float,Description="Mann-Whitney U-z test of Base Quality Bias (closer to 0 is better)">
+##INFO=<ID=MQSBZ,Number=1,Type=Float,Description="Mann-Whitney U-z test of Mapping Quality vs Strand Bias (closer to 0 is better)">
+##INFO=<ID=SCBZ,Number=1,Type=Float,Description="Mann-Whitney U-z test of Soft-Clip Length Bias (closer to 0 is better)">
+##INFO=<ID=SGB,Number=1,Type=Float,Description="Segregation based metric, http://samtools.github.io/bcftools/rd-SegBias.pdf">
+##INFO=<ID=MQ0F,Number=1,Type=Float,Description="Fraction of MQ0 reads (smaller is better)">
+##FORMAT=<ID=PL,Number=G,Type=Integer,Description="List of Phred-scaled genotype likelihoods">
+##FORMAT=<ID=AD,Number=R,Type=Integer,Description="Allelic depths (high-quality bases)">
+##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
+##INFO=<ID=AC,Number=A,Type=Integer,Description="Allele count in genotypes for each ALT allele, in the same order as listed">
+##INFO=<ID=AN,Number=1,Type=Integer,Description="Total number of alleles in called genotypes">
+##INFO=<ID=DP4,Number=4,Type=Integer,Description="Number of high-quality ref-forward , ref-reverse, alt-forward and alt-reverse bases">
+##INFO=<ID=MQ,Number=1,Type=Integer,Description="Average mapping quality">
+##bcftools_callVersion=1.22+htslib-1.22
+##bcftools_callCommand=call --ploidy 1 -m -v -o vcf-files/salmonella-variants.vcf bcf-files/salmonella-pass.bcf; Date=Tue Nov 17 12:39:22 2026
+#CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO    FORMAT  barcode01       barcode02       barcode03
+NC_003197.2     81      .       G       A       27.1835 .       DP=2;VDB=0.02;SGB=0.231553;MQ0F=0;AC=1;AN=1;DP4=0,0,0,2;MQ=60   GT:PL:AD        .:0,0:0,0       .:0,0:0,0   1:55,0:0,2
+NC_003197.2     483     .       A       G       27.1835 .       DP=2;VDB=0.1;SGB=0.231553;MQ0F=0;AC=1;AN=1;DP4=0,0,0,2;MQ=60    GT:PL:AD        .:0,0:0,0       .:0,0:0,0   1:55,0:0,2
+NC_003197.2     507     .       C       T       27.1835 .       DP=2;VDB=0.1;SGB=0.231553;MQ0F=0;AC=1;AN=1;DP4=0,0,0,2;MQ=60    GT:PL:AD        .:0,0:0,0       .:0,0:0,0   1:55,0:0,2
+NC_003197.2     537     .       A       C       27.1835 .       DP=2;VDB=0.1;SGB=0.231553;MQ0F=0;AC=1;AN=1;DP4=0,0,0,2;MQ=60    GT:PL:AD        .:0,0:0,0       .:0,0:0,0   1:55,0:0,2
+NC_003197.2     649     .       C       T       57.1756 .       DP=3;VDB=0.559209;SGB=-0.281359;MQ0F=0;AC=2;AN=2;DP4=0,0,0,3;MQ=60      GT:PL:AD        1:30,0:0,1      .:0,0:0,0    1:55,0:0,2
+NC_003197.2     831     .       T       C       27.1835 .       DP=2;VDB=0.18;SGB=0.231553;MQ0F=0;AC=1;AN=1;DP4=0,0,0,2;MQ=60   GT:PL:AD        .:0,0:0,0       .:0,0:0,0   1:55,0:0,2
+NC_003197.2     909     .       C       T       27.1835 .       DP=2;VDB=0.18;SGB=0.231553;MQ0F=0;AC=1;AN=1;DP4=0,0,0,2;MQ=60   GT:PL:AD        .:0,0:0,0       .:0,0:0,0   1:55,0:0,2
+NC_003197.2     1146    .       T       A       27.1835 .       DP=2;VDB=0.26;SGB=0.231553;MQ0F=0;AC=1;AN=1;DP4=0,0,0,2;MQ=60   GT:PL:AD        .:0,0:0,0       .:0,0:0,0   1:55,0:0,2
+NC_003197.2     1152    .       C       T       27.1835 .       DP=2;VDB=0.26;SGB=0.231553;MQ0F=0;AC=1;AN=1;DP4=0,0,0,2;MQ=60   GT:PL:AD        .:0,0:0,0       .:0,0:0,0   1:55,0:0,2
+NC_003197.2     1194    .       T       C       27.1835 .       DP=2;VDB=0.26;SGB=0.231553;MQ0F=0;AC=1;AN=1;DP4=0,0,0,2;MQ=60   GT:PL:AD        .:0,0:0,0       .:0,0:0,0   1:55,0:0,2
+~~~
+{: .output}
 

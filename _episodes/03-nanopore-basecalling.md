@@ -178,9 +178,9 @@ ls -1 pod5_files
 {: .bash}
 
 ~~~
-ont-1.pod5
-ont-2.pod5
-ont-3.pod5
+PBK98658_853a956f_57f83f46_0_subset.pod5
+PBK98658_853a956f_57f83f46_1_subset.pod5
+PBK98658_853a956f_57f83f46_2_subset.pod5
 ~~~
 {: .output}
 
@@ -468,19 +468,19 @@ more scripts/dorado_fastmodel.sl
 #!/bin/bash -e 
 
 #SBATCH --job-name      dorado_basecalling
-#SBATCH --time          00:10:00
+#SBATCH --time          00:15:00
 #SBATCH --mem           6G
 #SBATCH --cpus-per-task 4
 #SBATCH --output        dorado_%j.out
 #SBATCH --account       nesi02659
-#SBATCH --gpus-per-node A100-1g.5gb:1
+#SBATCH --gpus-per-node l4:1
 
 module purge
 module load dorado
 
 dorado download --model dna_r10.4.1_e8.2_400bps_fast@v5.2.0 --directory dorado-models/
 
-dorado basecaller  --device 'cuda:all' dorado-models/dna_r10.4.1_e8.2_400bps_fast@v5.2.0 pod5_files/ > bam-unaligned/ecoli-pod5-pass-basecalls.bam
+dorado basecaller  --device 'cuda:all' dorado-models/dna_r10.4.1_e8.2_400bps_fast@v5.2.0 pod5_files --kit-name SQK-RBK114-96 --output-dir bam-unaligned
 ~~~
 {: .output}
 
@@ -492,21 +492,24 @@ dorado basecaller  --device 'cuda:all' dorado-models/dna_r10.4.1_e8.2_400bps_fas
 Let's have a closer look at the `dorado basecaller` command:
 
 ~~~
-dorado basecaller  \
-  --device 'cuda:all' \
-  dorado-models/dna_r9.4.1_e8_fast@v3.4 \
-  pod5_pass \
-  > bam-unaligned/ecoli-pod5-pass-basecalls.bam
+dorado basecaller  --device 'cuda:all' \
+  dorado-models/dna_r10.4.1_e8.2_400bps_fast@v5.2.0 \
+  pod5_files \
+  --kit-name SQK-RBK114-96 \
+  --output-dir bam-unaligned
+
 ~~~
 {: .output}
 
 Options used:
 
  - `--device 'cuda:all'`: this refers to which GPU device should be used (here we let the software select use `all` available devices, but it can sometimes be useful to select specific GPU devices).
- - `-s fastq_fastmodel`: the name of the folder where the .fastq files will be written to.
- - `dorado-models/dna_r9.4.1_e8_fast@v3.4`: this specifies the model (and its location, relative to wheer we call the script from) that is being used to perform the basecalling.  In this case we are using the "fast" model (rather than high-accuracy (hac) or super-high accuracy (sup)) to save time, and `dna` denotes that we sequenced... DNA. `r9.4.1` refers to the flowcell version that was used to generate the data, and e8 is the kit chemistry that was used for library generation (e8 is kit9 or kit 10, e8.2 is kit 14).
- - `pod5_pass`: this is the directory containing the `.pod5` (or `.fast5` - `dorado` with process either type) files that we would like to process.
- - `bam-unaligned/ecoli-pod5-pass-basecalls.bam`: output file location (not that the ">" character sends the output from `dorado` to this file).
+ - `dorado-models/dna_r10.4.1_e8.2_400bps_fast@v5.2.0`: this specifies the model (and its location, relative to wheer we call the script from) that is being used to perform the basecalling.  
+ In this case we are using the "fast" model (rather than high-accuracy (hac) or super-high accuracy (sup)) to save time, and `dna` denotes that we sequenced... DNA. `r10.4.1` refers 
+ to the flowcell version that was used to generate the data, and e8.2 is the kit chemistry that was used for library generation (e8 is kit9 or kit 10, e8.2 is kit 14).
+ - `pod5_files`: this is the directory containing the `.pod5` (or `.fast5` - `dorado` with process either type) files that we would like to process.
+ - `--kit-name SQK-RBK114-96`: barcoding kit that was used.
+ - `bam-unaligned`: output location.
 
 Before running the script, we need to create the directory where the output files will be written:
 
@@ -530,7 +533,6 @@ sbatch scripts/dorado_fastmodel.sl
 ~~~
 {: .bash}
 
-
 Once the script has been submitted, you can check to make sure it is running via:
 
 ~~~
@@ -542,7 +544,7 @@ squeue --me
 ~~~
 JOBID         USER     ACCOUNT   NAME        CPUS MIN_MEM PARTITI START_TIME     TIME_LEFT STATE    NODELIST(REASON)    
 41491249      michael. nesi02659 dorado_basec   4      6G gpu     2023-11-26T0        8:31 RUNNING  wbl001              
-41491302      michael. nesi02659 spawner-jupy   4      8G interac 2023-11-26T0       28:44 RUNNING  wbn001      
+41491302      michael. nesi02659 spawner-jupy    4      8G interac 2023-11-26T0       28:44 RUNNING  wbn001      
 ~~~
 {: .output}
 
@@ -574,11 +576,68 @@ Use "Control-c" to exit (it's okay, it won't kill the job).
 
 The job should take a few minutes to run.
 
-Once the job has completed successfully, the file `ecoli-pod5-pass-basecalls.bam` will have been created 
-in the directory `~/obss_2026/nanopore/bacteria-data/bam-unaligned/`.
+Once the job has completed successfully, the bams files (one per barcode, plus "unclassified" reads) 
+will be written to a rather convoluated directory structure under: `~/obss_2026/nanopore/bacteria-data/bam-unaligned/`.
 
 ~~~
-ls -lh bam-unaligned/
+tree bam-unaligned/
 ~~~
 {: .bash}
 
+~~~
+bam-unaligned
+└── NO_MISSV2_P2I
+    └── P2I_96
+        └── 20260413_1636_P2I-00014-B_PBK98658_853a956f
+            └── bam_pass
+                ├── barcode01
+                │   └── PBK98658_pass_barcode01_853a956f_57f83f46_0.bam
+                ├── barcode02
+                │   └── PBK98658_pass_barcode02_853a956f_57f83f46_0.bam
+                ├── barcode03
+                │   └── PBK98658_pass_barcode03_853a956f_57f83f46_0.bam
+                ├── barcode04
+                │   └── PBK98658_pass_barcode04_853a956f_57f83f46_0.bam
+                ├── barcode05
+                │   └── PBK98658_pass_barcode05_853a956f_57f83f46_0.bam
+                ├── barcode06
+                │   └── PBK98658_pass_barcode06_853a956f_57f83f46_0.bam
+.
+.
+.
+                ├── barcode95
+                │   └── PBK98658_pass_barcode95_853a956f_57f83f46_0.bam
+                ├── barcode96
+                │   └── PBK98658_pass_barcode96_853a956f_57f83f46_0.bam
+                └── unclassified
+                    └── PBK98658_pass_unclassified_853a956f_57f83f46_0.bam
+
+101 directories, 97 files
+~~~
+{:.output}
+
+Each `.bam` file contains the reads labelled with a specific DNA barcode (`barcode01`-`barcode96`) or reads
+whose barcodesc ould not be determined (`unclassified`).
+
+Because I created a data subset that only contained reads from the first three barcodes (plus some unclassified reads), 
+those are the only `.bam` files that contain data.  We can check the size of each folder to confirm this (use `du` to 
+find the size in MB of all the folders, then sort the results and look at the largest 10):
+
+~~~
+du -sm bam-unaligned/NO_MISSV2_P2I/P2I_96/20260413_1636_P2I-00014-B_PBK98658_853a956f/bam_pass/* | sort -n | tail -10
+~~~
+{: .bash}
+
+~~~
+1       bam-unaligned/NO_MISSV2_P2I/P2I_96/20260413_1636_P2I-00014-B_PBK98658_853a956f/bam_pass/barcode91
+1       bam-unaligned/NO_MISSV2_P2I/P2I_96/20260413_1636_P2I-00014-B_PBK98658_853a956f/bam_pass/barcode92
+1       bam-unaligned/NO_MISSV2_P2I/P2I_96/20260413_1636_P2I-00014-B_PBK98658_853a956f/bam_pass/barcode93
+1       bam-unaligned/NO_MISSV2_P2I/P2I_96/20260413_1636_P2I-00014-B_PBK98658_853a956f/bam_pass/barcode94
+1       bam-unaligned/NO_MISSV2_P2I/P2I_96/20260413_1636_P2I-00014-B_PBK98658_853a956f/bam_pass/barcode95
+1       bam-unaligned/NO_MISSV2_P2I/P2I_96/20260413_1636_P2I-00014-B_PBK98658_853a956f/bam_pass/barcode96
+9       bam-unaligned/NO_MISSV2_P2I/P2I_96/20260413_1636_P2I-00014-B_PBK98658_853a956f/bam_pass/unclassified
+13      bam-unaligned/NO_MISSV2_P2I/P2I_96/20260413_1636_P2I-00014-B_PBK98658_853a956f/bam_pass/barcode03
+17      bam-unaligned/NO_MISSV2_P2I/P2I_96/20260413_1636_P2I-00014-B_PBK98658_853a956f/bam_pass/barcode01
+17      bam-unaligned/NO_MISSV2_P2I/P2I_96/20260413_1636_P2I-00014-B_PBK98658_853a956f/bam_pass/barcode02
+~~~
+{:.output}
