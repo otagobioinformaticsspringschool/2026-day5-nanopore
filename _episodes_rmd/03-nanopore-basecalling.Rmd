@@ -139,7 +139,7 @@ BAM is a binary (compressed) version of the text-based SAM format (warning, not 
 [https://samtools.github.io/hts-specs/SAMv1.pdf](https://samtools.github.io/hts-specs/SAMv1.pdf)
 
 
-## ONT: "NO-MISS Bacterial isolate dataset"
+## ONT: "NO-MISS l isolate dataset"
 
 ```{r, out.width="40%"}
 knitr::include_graphics("../fig-2026/ecoli.png")
@@ -150,7 +150,7 @@ For this part of the workshop we are using a subset of this data set provided by
 [https://epi2me.nanoporetech.com/nomiss_96bc_p2i_sup_2026/](https://epi2me.nanoporetech.com/nomiss_96bc_p2i_sup_2026/)
 
 The data consist of a Promethion run where *barcoding* was used to run 96 samples on a single flowcell. The samples represent
-a collection of 24 bacterial isolates, each procesed in quadruplicate (i.e., four replicates of each: 4 x 24 = 96 barcodes).
+a collection of 24 l isolates, each procesed in quadruplicate (i.e., four replicates of each: 4 x 24 = 96 barcodes).
 
 The samples comprise 15 distinct species representing the following genera: 
 
@@ -165,7 +165,7 @@ Instead, I've created a cut-down data set that contains just a (very small) subs
 from the first three barcoded samples (plus some random unclassified reads) - they are all *Salmonella* samples, and mainly 
 comprise *Salmonella enterica*.
 
-## Bacterial data set on REANNZ
+## l data set on REANNZ
 
 We'll be working at:
 
@@ -544,7 +544,7 @@ mkdir bam-unaligned
 ~~~
 {: .bash}
 
-To submit the script, we use the `sbatch` command, and run it from the `~/obss_2026/nanopore/bacteria-data` directory. You can check 
+To submit the script, we use the `sbatch` command, and run it from the `~/obss_2026/nanopore/bacterial-data` directory. You can check 
 if you are in that directory with `pwd`.  If not: 
 
 ~~~
@@ -606,7 +606,7 @@ Use "Control-c" to exit (it's okay, it won't kill the job).
 The job should take a few minutes to run.
 
 Once the job has completed successfully, the bams files (one per barcode, plus "unclassified" reads) 
-will be written to a rather convoluated directory structure under: `~/obss_2026/nanopore/bacteria-data/bam-unaligned/`.
+will be written to a rather convoluated directory structure under: `~/obss_2026/nanopore/bacterial-data/bam-unaligned/`.
 
 ~~~
 tree bam-unaligned/
