@@ -170,14 +170,14 @@ comprise *Salmonella enterica*.
 We'll be working at:
 
 ~~~
-~/obss_2026/nanopore/bacteria-data/
+~/obss_2026/nanopore/bacterial-data/
 ~~~
 {: .output}
 
 Let's change to that directory now:
 
 ~~~
-cd ~/obss_2026/nanopore/bacteria-data/
+cd ~/obss_2026/nanopore/bacterial-data/
 ~~~
 {: .bash}
 
@@ -548,7 +548,7 @@ To submit the script, we use the `sbatch` command, and run it from the `~/obss_2
 if you are in that directory with `pwd`.  If not: 
 
 ~~~
-cd ~/obss_2026/nanopore/bacteria-data/
+cd ~/obss_2026/nanopore/bacterial-data/
 ~~~
 {: .bash}
 
