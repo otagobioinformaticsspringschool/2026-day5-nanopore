@@ -10,7 +10,7 @@ objectives:
 - "Align reads from long-read data."
 - "Perform variant calling using nanopore data."
 keypoints:
-- "Long-read based algorithms (e.g., minimap2) need to be used when aligning long read data."
+- "Long-read based algorithms (e.g., the minimap2 aligner used by dorado) need to be used when aligning long read data."
 - "Post-alignment, standard software tools (e.g., samtools, bcftools, etc) can be used to perform variant calling."
 source: Rmd
 ---
